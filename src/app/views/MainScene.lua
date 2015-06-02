@@ -39,10 +39,8 @@ function MainScene:onCreate()
     mainMenu:addChild(settingMenuItem) 
     mainMenu:addChild(aboutMenuItem)
     mainMenu:alignItemsVertically()
-    local layer = cc.Layer:create()  
-    layer:addChild(mainMenu)
     
-    self:addChild(layer)
+    self:addChild(mainMenu)
 end
 
 return MainScene
