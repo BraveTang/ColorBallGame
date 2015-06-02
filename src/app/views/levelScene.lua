@@ -59,7 +59,8 @@ function LevelScene:onCreate()
                 return true
             elseif target == levelTable[6][1] then
                 print("OK")
-                self:getApp():enterScene("GameScene")   
+                self:getApp():enterScene("GameScene") 
+                return true  
             end
         end
 
