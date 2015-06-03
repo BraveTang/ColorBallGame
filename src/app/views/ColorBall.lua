@@ -16,7 +16,7 @@ function ColorBall:init()
     ttfConfig.fontSize=46
     self.numberLabel = cc.Label:createWithTTF(ttfConfig,tostring(2), cc.VERTICAL_TEXT_ALIGNMENT_CENTER, 100)
     self.numberLabel:setPosition(cc.p(50,50))
-    self.numberLabel:setVisible(false)
+    self.numberLabel:setVisible(true)
     self._ball:addChild(self.numberLabel)  
 	print("colorball")
 end
@@ -49,11 +49,11 @@ function ColorBall:setColorFromNumber(n)
     elseif n == 8 then
         self._ball:setColor(cc.c4b(142,0,128,255))
     elseif n == 16 then
-        self._ball:setColor(cc.c4b(249,255,0,255))
+        self._ball:setColor(cc.c4b(221,0,96,255))
     elseif n == 32 then
         self._ball:setColor(cc.c4b(255,0,0,255))
     elseif n == 64 then
-        self._ball:setColor(cc.c4b(249,255,0,255))
+        self._ball:setColor(cc.c4b(225,146,0,255))
     elseif n == 128 then
         self._ball:setColor(cc.c4b(224,0,224,255))
     elseif n == 256 then
@@ -65,6 +65,10 @@ function ColorBall:setColorFromNumber(n)
     elseif n == 2048 then
         self._ball:setColor(cc.c4b(255,0,255,255))
 	end
+end
+
+function ColorBall:setPosition(row,col)
+    self._ball:setPosition(cc.p(100*(col-1)+50,100*(row-1)+50))
 end
 
 return ColorBall
