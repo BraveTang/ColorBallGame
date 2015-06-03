@@ -16,8 +16,64 @@ function GameScene:onCreate()
     selectedBackButton:setPosition(cc.p(50,900))
     selectedBackButton:setScale(0.5)
     selectedBackButton:setVisible(false)
-    self:add(selectedBackButton)
-    self:add(unselectedBackButton)
+    self:addChild(selectedBackButton)
+    self:addChild(unselectedBackButton)
+    --显示关卡数
+    local ttfConfig = {}
+    ttfConfig.fontFilePath="fonts/arial.ttf"
+    ttfConfig.fontSize=40
+    local number = 3
+    local level = "level " .. number
+    local levelLabel = cc.Label:createWithTTF(ttfConfig,level, cc.VERTICAL_TEXT_ALIGNMENT_CENTER, s.width)
+    levelLabel:setPosition(cc.p(150,900))
+    levelLabel:setColor(cc.c4b(255,255,0,255))
+    self:addChild(levelLabel)
+    --剩余步数
+    ttfConfig.fontSize=35
+    local steps = 100
+    local step = "steps:  " .. steps
+    local stepsLabel = cc.Label:createWithTTF(ttfConfig,step, cc.VERTICAL_TEXT_ALIGNMENT_CENTER, s.width)
+    stepsLabel:setPosition(cc.p(550,900))
+    stepsLabel:setColor(cc.c4b(255,255,0,255))
+    self:addChild(stepsLabel)
+    
+    local goal = {{Count=10,Sum=10},
+                           {Count=1,Sum=10},
+                           {Count=1,Sum=10},
+                           {Count=1,Sum=10}}
+                            
+    --目标
+    ttfConfig.fontSize=20
+    for i=1,4 do
+        local goalBall = cc.Sprite:create("circle-hd.png")
+        goalBall:setPosition(cc.p(140*(i-1)+105,820))
+        goalBall:setScale(0.2)
+        goalBall:setColor(cc.c4b(0,0,255,255))
+        local goalLabel = cc.Label:createWithTTF(ttfConfig, goal[i].Count .. "/" .. goal[i].Sum, cc.VERTICAL_TEXT_ALIGNMENT_CENTER, s.width)
+        goalLabel:setPosition(cc.p(140*(i-1)+105,840))
+        self:addChild(goalLabel)
+        self:addChild(goalBall)
+    end
+    
+    
+    local draw = cc.DrawNode:create()
+    draw:drawLine(cc.p(55,550),cc.p(155,550),cc.c4f(1,1,1,1))
+    draw:drawLine(cc.p(55,550),cc.p(55,800),cc.c4f(1,1,1,1))
+    draw:drawLine(cc.p(155,550),cc.p(155,800),cc.c4f(1,1,1,1))
+    
+    draw:drawLine(cc.p(195,550),cc.p(295,550),cc.c4f(1,1,1,1))
+    draw:drawLine(cc.p(195,550),cc.p(195,800),cc.c4f(1,1,1,1))
+    draw:drawLine(cc.p(295,550),cc.p(295,800),cc.c4f(1,1,1,1))
+    
+    draw:drawLine(cc.p(335,550),cc.p(435,550),cc.c4f(1,1,1,1))
+    draw:drawLine(cc.p(335,550),cc.p(335,800),cc.c4f(1,1,1,1))
+    draw:drawLine(cc.p(435,550),cc.p(435,800),cc.c4f(1,1,1,1))
+    
+    draw:drawLine(cc.p(475,550),cc.p(575,550),cc.c4f(1,1,1,1))
+    draw:drawLine(cc.p(475,550),cc.p(475,800),cc.c4f(1,1,1,1))
+    draw:drawLine(cc.p(575,550),cc.p(575,800),cc.c4f(1,1,1,1))
+    self:addChild(draw)    
+    
     --初始化游戏网格,并随机产生两个彩球
     self.gameGrid,self.gameLayer = self:initGameGrid(5,5)
     self:addNewball()
@@ -112,7 +168,7 @@ function GameScene:onCreate()
     eventDispatcher:addEventListenerWithSceneGraphPriority(listener2, self.gameLayer)
     --屏幕分隔线
     local segmentLine = cc.DrawNode:create()
-    segmentLine:drawLine(cc.p(0,0),cc.p(s.width,0),cc.c4f(1,0,0,1))
+    segmentLine:drawLine(cc.p(0,0),cc.p(s.width,0),cc.c4f(1,1,1,1))
     segmentLine:setPosition(cc.p(0,s.height/2+40))
     self:addChild(segmentLine)
    
@@ -179,34 +235,6 @@ function GameScene:addNewball()
 	   end
 	end
 end
---向上移动
---function GameScene:doUp()
---    local isMove = false
---    for col =1,5 do
---        for row = 5,1,-1 do
---            for row_t = row - 1,1,-1 do
---                if self.gameGrid[row][col] == 0 then
---                    if self.gameGrid[row_t][col] ~= 0 then
---                        self.gameGrid[row_t][col]:setPosition(row,col)
---                        self.gameGrid[row][col] = self.gameGrid[row_t][col]
---                        self.gameGrid[row_t][col] = 0
---                        isMove = true
---                    end
---                else                    
---                    repeat
---                    	if self.gameGrid[row_t][col] == 0 then
---                            break    
---                        end 
---                        
---                        break
---                    until true
---                            
---                end                
---            end
---        end
---     end
---     return isMove	
---end
 --向上移动
 function GameScene:moveUp()
     local isMove = false
@@ -348,7 +376,6 @@ function GameScene:moveLeft()
                 end
             end
         end
-
     end 
     return isMove
 end
