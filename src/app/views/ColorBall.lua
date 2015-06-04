@@ -8,8 +8,8 @@ end
 function ColorBall:init()
 	self._number = 2
 	self._ball = cc.Sprite:create("circle-hd.png")
-    self._ball:setPosition(cc.p(50,50))
-    self._ball:setScale(0.8)
+    self._ball:setPosition(cc.p(62.5,62.5))
+    self._ball:setScale(1)
     self._ball:setColor(cc.c4b(0,0,255,255))
     local ttfConfig = {}
     ttfConfig.fontFilePath="fonts/arial.ttf"
@@ -68,7 +68,7 @@ function ColorBall:setColorFromNumber(n)
 end
 
 function ColorBall:setPosition(row,col)
-    self._ball:setPosition(cc.p(100*(col-1)+50,100*(row-1)+50))
+    self._ball:setPosition(cc.p(125*(col-1)+62.5,125*(row-1)+62.5))
 end
 
 return ColorBall
