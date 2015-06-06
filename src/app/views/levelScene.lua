@@ -1,8 +1,15 @@
-local LevelScene = class("LevelScene", cc.load("mvc").ViewBase)
-
+local LevelScene = class("LevelScene",cc.load("mvc").ViewBase)
+local GameScene = import(".GameScene")
 --LevelScene.RESOURCE_FILENAME = "LevelScene.csb"
 
-function LevelScene:onCreate()
+
+function LevelScene:onCreate(arg1,arg2)
+print(agr1)
+print(agr2)
+    self:init()
+end
+
+function LevelScene:init()
 
     local levelTable = {}
     --加载关卡场景
@@ -58,8 +65,11 @@ function LevelScene:onCreate()
                 unselectedButton:setVisible(false)            
                 return true
             elseif target == levelTable[6][1] then
-                print("OK")
+--                self:getApp():enterScene("GameScene") 
                 self:getApp():enterScene("GameScene") 
+                --gameScene.level = 3
+                print("create scene")
+               -- cc.Director:getInstance():replaceScene(gameScene)
                 return true  
             end
         end
@@ -89,6 +99,11 @@ function LevelScene:onCreate()
     local layer = cc.Layer:create()
     layer:addChild(draw) 
     self:addChild(layer) 
+end
+
+function LevelScene:onEnter()
+    print("LevelScene onEnter")
+	
 end
 
 return LevelScene

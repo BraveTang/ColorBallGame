@@ -132,3 +132,7 @@ tests/cpp-tests/Resources/audio
 /tests/js-tests/res
 #user
 /cocos2d/build
+
+src/app/views/GameScene.lua
+
+*.lua
