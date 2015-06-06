@@ -18,9 +18,11 @@ function ColorBall:init()
     self.numberLabel:setPosition(cc.p(50,50))
     self.numberLabel:setVisible(true)
     self._ball:addChild(self.numberLabel)  
+	print("colorball")
 end
 
 function ColorBall:getBall()
+    print("getball")
 	return self._ball
 end
 
