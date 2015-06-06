@@ -17,11 +17,11 @@ function GameScene:onCreate()
     self:addChild(selectedBackButton)
     self:addChild(unselectedBackButton)
     
-    --游戏关卡
-    self.level=1
-    --加载游戏数据
-    self.steps,self.stepsLabel,self.gameData,self.goalLabel1,self.goalLabel2,self.goalLabel3,self.goalLabel4,self.goalSum1,self.goalSum2,self.goalSum3,self.goalSum4=self:loadGameStatus(self.level)
-    --完成目标彩球数量
+--    --游戏关卡
+--    self.level=1
+--    --加载游戏数据
+--    self.steps,self.stepsLabel,self.gameData,self.goalLabel1,self.goalLabel2,self.goalLabel3,self.goalLabel4,self.goalSum1,self.goalSum2,self.goalSum3,self.goalSum4=self:loadGameStatus(self.level)
+--    --完成目标彩球数量
     self.goalNumber1 = 0
     self.goalNumber2 = 0
     self.goalNumber3 = 0
@@ -422,8 +422,8 @@ function GameScene:loadGameStatus(level)
     local str = io.readfile(configFile)
     local f = loadstring(str)
     local gameData = f()   
-    
- 
+
+
     --显示关卡数
     local ttfConfig = {}
     ttfConfig.fontFilePath="fonts/arial.ttf"
@@ -439,8 +439,8 @@ function GameScene:loadGameStatus(level)
     stepsLabel:setPosition(cc.p(550,900))
     stepsLabel:setColor(cc.c4b(255,255,0,255))
     self:addChild(stepsLabel)
-    
-     --目标
+
+    --目标
     ttfConfig.fontSize=20
     local i = 1   
     local goalTable = {} 
@@ -478,84 +478,200 @@ function GameScene:loadGameStatus(level)
         end
     end 
     local goalLabel1 = cc.Label:createWithTTF(ttfConfig, 0 .. "/" .. goalTable[1], cc.VERTICAL_TEXT_ALIGNMENT_CENTER, s.width)
-            goalLabel1:setPosition(cc.p(140*(1-1)+105,840))
-            self:addChild(goalLabel1)
+    goalLabel1:setPosition(cc.p(140*(1-1)+105,840))
+    self:addChild(goalLabel1)
     local goalLabel2 = cc.Label:createWithTTF(ttfConfig, 0 .. "/" .. goalTable[2], cc.VERTICAL_TEXT_ALIGNMENT_CENTER, s.width)
-            goalLabel2:setPosition(cc.p(140*(2-1)+105,840))
-            self:addChild(goalLabel2)
+    goalLabel2:setPosition(cc.p(140*(2-1)+105,840))
+    self:addChild(goalLabel2)
     local goalLabel3 = cc.Label:createWithTTF(ttfConfig, 0 .. "/" .. goalTable[3], cc.VERTICAL_TEXT_ALIGNMENT_CENTER, s.width)
-            goalLabel3:setPosition(cc.p(140*(3-1)+105,840))
-            self:addChild(goalLabel3)
+    goalLabel3:setPosition(cc.p(140*(3-1)+105,840))
+    self:addChild(goalLabel3)
     local goalLabel4 = cc.Label:createWithTTF(ttfConfig, 0 .. "/" .. goalTable[4], cc.VERTICAL_TEXT_ALIGNMENT_CENTER, s.width)
-            goalLabel4:setPosition(cc.p(140*(4-1)+105,840))
-            self:addChild(goalLabel4)
+    goalLabel4:setPosition(cc.p(140*(4-1)+105,840))
+    self:addChild(goalLabel4)
     return steps,stepsLabel,gameData,goalLabel1,goalLabel2,goalLabel3,goalLabel4,goalTable[1],goalTable[2],goalTable[3],goalTable[4]
 end
+
+
+
+
+
+
 --更新游戏剩余步数
 function GameScene:updateSteps()
-	self.steps = self.steps - 1
-	if self.steps < 0 then
-		print("game over")
-	end
-	self.stepsLabel:setString("steps: " .. tostring(self.steps))
+    self.steps = self.steps - 1
+    if self.steps < 0 then
+        print("game over")
+        self:createMaskLayer("game over")
+    end
+    self.stepsLabel:setString("steps: " .. tostring(self.steps))
 end
+
+
+
+
+
+
+
 
 --更新游戏目标
 function GameScene:updateGoal(level,number)
     local numberTable={}
-	for k in pairs(self.gameData[level]) do
-		if k == "ball_2" then
-		   table.insert(numberTable,2)
-		elseif k == "ball_4" then
-		   table.insert(numberTable,4)
-		elseif k == "ball_8" then
-           table.insert(numberTable,8)
+    for k in pairs(self.gameData[level]) do
+        if k == "ball_2" then
+            table.insert(numberTable,2)
+        elseif k == "ball_4" then
+            table.insert(numberTable,4)
+        elseif k == "ball_8" then
+            table.insert(numberTable,8)
         elseif k == "ball_16" then
-           table.insert(numberTable,16)  
+            table.insert(numberTable,16)  
         elseif k == "ball_32" then
-           table.insert(numberTable,32)
+            table.insert(numberTable,32)
         elseif k == "ball_64" then
-           table.insert(numberTable,64)
+            table.insert(numberTable,64)
         elseif k == "ball_128" then
-           table.insert(numberTable,128) 
+            table.insert(numberTable,128) 
         elseif k == "ball_256" then
-           table.insert(numberTable,256)
+            table.insert(numberTable,256)
         elseif k == "ball_512" then
-           table.insert(numberTable,512)
+            table.insert(numberTable,512)
         elseif k == "ball_1024" then
-           table.insert(numberTable,1024)  
+            table.insert(numberTable,1024)  
         elseif k == "ball_2048" then
-           table.insert(numberTable,2048)  
-		end
-	end
-	if numberTable[1] == number then
-	   if self.goalNumber1 <  self.goalSum1 then
-	       self.goalNumber1 = self.goalNumber1 +1
-	       self.goalLabel1:setString(self.goalNumber1 .. "/" .. self.goalSum1)
-	   else
-	       print("goal1 ok")
-	   end
-	elseif numberTable[2] == number then
-	   if self.goalNumber2 <  self.goalSum2 then
-           self.goalNumber2 = self.goalNumber2 +1
-           self.goalLabel2:setString(self.goalNumber2 .. "/" .. self.goalSum2)
-       else
-           print("goal2 ok")
-       end
+            table.insert(numberTable,2048)  
+        end
+    end
+
+    if(self.goalNumber1 == self.goalSum1 and self.goalNumber2 == self.goalSum2 and self.goalNumber3 == self.goalSum3 and self.goalNumber4 == self.goalSum4) then
+        self:createMaskLayer("perfect")
+    end
+
+    if numberTable[1] == number then
+        if self.goalNumber1 <  self.goalSum1 then
+            self.goalNumber1 = self.goalNumber1 +1
+            self.goalLabel1:setString(self.goalNumber1 .. "/" .. self.goalSum1)
+        else
+            print("goal1 ok")
+        end
+    elseif numberTable[2] == number then
+        if self.goalNumber2 <  self.goalSum2 then
+            self.goalNumber2 = self.goalNumber2 +1
+            self.goalLabel2:setString(self.goalNumber2 .. "/" .. self.goalSum2)
+        else
+            print("goal2 ok")
+        end
     elseif numberTable[3] == number then
-       if self.goalNumber3 <  self.goalSum3 then
-           self.goalNumber3 = self.goalNumber3 +1
-           self.goalLabel3:setString(self.goalNumber3 .. "/" .. self.goalSum3)
-       else
-           print("goal3 ok")
-       end
+        if self.goalNumber3 <  self.goalSum3 then
+            self.goalNumber3 = self.goalNumber3 +1
+            self.goalLabel3:setString(self.goalNumber3 .. "/" .. self.goalSum3)
+        else
+            print("goal3 ok")
+        end
     elseif numberTable[4] == number then
-       if self.goalNumber4 <  self.goalSum4 then
-           self.goalNumber4 = self.goalNumber4 +1
-           self.goalLabel4:setString(self.goalNumber4 .. "/" .. self.goalSum4)
-       else
-           print("goal2 ok")
-       end
+        if self.goalNumber4 <  self.goalSum4 then
+            self.goalNumber4 = self.goalNumber4 +1
+            self.goalLabel4:setString(self.goalNumber4 .. "/" .. self.goalSum4)
+        else
+            print("goal2 ok")
+        end
     end 
 end
+
+
+
+
+
+
+
+--
+function GameScene:createMaskLayer(action)
+
+    local layer = cc.LayerColor:create(cc.c4b(0,0,0,150))
+    local s = cc.Director:getInstance():getWinSize()
+
+    layer:setContentSize(500,300)
+    layer:ignoreAnchorPointForPosition(false)
+    layer:setAnchorPoint(cc.p(0.5,0.5))
+    layer:setPosition(cc.p(s.width/2,s.height/2))
+
+
+    local draw = cc.DrawNode:create()
+    draw:drawRect(cc.p(0,0), cc.p(500,300), cc.c4f(1,1,1,1))
+    draw:setPosition(cc.p(0,0))
+    draw:setContentSize(500,300)
+    layer:addChild(draw)
+
+    local ttfConfig = {}
+    ttfConfig.fontFilePath="fonts/arial.ttf"
+    ttfConfig.fontSize=40
+    if action == "game over" then
+        local label = cc.Label:createWithTTF(ttfConfig,"Game Over!", cc.VERTICAL_TEXT_ALIGNMENT_CENTER, 500)
+        label:setPosition(cc.p(250,200))
+        label:setColor(cc.c4b(255,255,0,255))
+        layer:addChild(label)
+
+        local function backMenuItemCallBack()
+            --        cclog("selected item: tag: %d, index:%d", tag, sender:getSelectedIndex() ) 
+            self:getApp():enterScene("LevelScene")   
+        end
+        ttfConfig.fontSize=30
+        local backLabel = cc.Label:createWithTTF(ttfConfig,"Back", cc.VERTICAL_TEXT_ALIGNMENT_CENTER,500)
+        local backMenuItem = cc.MenuItemLabel:create(backLabel)
+        backMenuItem:setColor(cc.c4b(255,255,255,255))
+        backMenuItem:setDisabledColor(cc.c4b(255,255,0,255))
+        backMenuItem:registerScriptTapHandler(backMenuItemCallBack)
+        local menu = cc.Menu:create()
+        menu:addChild(backMenuItem) 
+        menu:alignItemsVertically() 
+        menu:setPosition(cc.p(250,100))
+        layer:addChild(menu)
+
+    elseif action == "perfect" then 
+        local label = cc.Label:createWithTTF(ttfConfig,"Perfect!", cc.VERTICAL_TEXT_ALIGNMENT_CENTER, 500)
+        label:setPosition(cc.p(250,200))
+        label:setColor(cc.c4b(255,255,0,255))
+        layer:addChild(label)
+
+        local function nextMenuItemCallBack()
+            --        cclog("selected item: tag: %d, index:%d", tag, sender:getSelectedIndex() ) 
+            self:getApp():enterScene("GameScene")   
+        end
+        ttfConfig.fontSize=30
+        local nextLabel = cc.Label:createWithTTF(ttfConfig,"next level", cc.VERTICAL_TEXT_ALIGNMENT_CENTER,500)
+        local nextMenuItem = cc.MenuItemLabel:create(nextLabel)
+        nextMenuItem:setColor(cc.c4b(255,255,255,255))
+        nextMenuItem:setDisabledColor(cc.c4b(255,255,0,255))
+        nextMenuItem:registerScriptTapHandler(nextMenuItemCallBack)
+        local menu = cc.Menu:create()
+        menu:addChild(nextMenuItem) 
+        menu:alignItemsVertically() 
+        menu:setPosition(cc.p(250,100))
+        layer:addChild(menu)
+    end
+    --吞并下层事件
+    local function onTouchBegan(touch, event)
+        return true
+    end
+    local listener = cc.EventListenerTouchOneByOne:create()
+    listener:setSwallowTouches(true)
+    layer:setUserObject(listener)
+    --注册事件处理
+    listener:registerScriptHandler(onTouchBegan,cc.Handler.EVENT_TOUCH_BEGAN )
+    --添加事件分发器
+    local eventDispatcher = self:getEventDispatcher()
+    eventDispatcher:addEventListenerWithSceneGraphPriority(listener, layer)
+
+    self:addChild(layer)
+end
+
+
+function GameScene:onEnter()
+    print("onEnter")
+    --游戏关卡
+    self.level=2
+    --加载游戏数据
+    self.steps,self.stepsLabel,self.gameData,self.goalLabel1,self.goalLabel2,self.goalLabel3,self.goalLabel4,self.goalSum1,self.goalSum2,self.goalSum3,self.goalSum4=self:loadGameStatus(self.level)
+end
+
 return GameScene
